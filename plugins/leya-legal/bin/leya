@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Wrapper that lets Claude (or anyone with this plugin's bin/ on PATH) call
+# the Leya client without knowing the plugin's install path or Python invocation.
+
+set -euo pipefail
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+exec python3 "$SCRIPT_DIR/../skills/leya-legal/scripts/leya_client.py" "$@"

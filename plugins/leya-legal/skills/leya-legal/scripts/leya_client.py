@@ -1,5 +1,5 @@
 # ABOUTME: Thin CLI wrapper around the Leya v1 API for use from inside the Claude plugin.
-# ABOUTME: Resolves the API key from ${CLAUDE_PLUGIN_DATA}/leya.json first, then LEYA_API_KEY env.
+# ABOUTME: Resolves the API key from LEYA_API_KEY env var, then ~/.config/leya/key.json.
 
 from __future__ import annotations
 
@@ -15,25 +15,26 @@ from urllib.error import HTTPError
 DEFAULT_BASE = "https://leya-api-production.up.railway.app"
 
 
-def _resolve_api_key() -> str | None:
-    """Plugin data dir first, then env var.
+def _config_path() -> Path:
+    xdg = os.environ.get("XDG_CONFIG_HOME")
+    base = Path(xdg) if xdg else Path.home() / ".config"
+    return base / "leya" / "key.json"
 
-    The plugin data dir is persistent per-user. /leya:setup writes a leya.json
-    file there containing {"api_key": "leya_live_..."}. Env var is the
-    fallback for power users running the script outside Claude.
-    """
-    data_dir = os.environ.get("CLAUDE_PLUGIN_DATA")
-    if data_dir:
-        config_path = Path(data_dir) / "leya.json"
-        if config_path.is_file():
-            try:
-                blob = json.loads(config_path.read_text())
-                key = blob.get("api_key")
-                if key:
-                    return key
-            except (json.JSONDecodeError, OSError):
-                pass
-    return os.environ.get("LEYA_API_KEY")
+
+def _resolve_api_key() -> str | None:
+    env_key = os.environ.get("LEYA_API_KEY")
+    if env_key:
+        return env_key
+    config_path = _config_path()
+    if config_path.is_file():
+        try:
+            blob = json.loads(config_path.read_text())
+            key = blob.get("api_key")
+            if key:
+                return key
+        except (json.JSONDecodeError, OSError):
+            pass
+    return None
 
 
 def _request(path: str, params: dict[str, str] | None = None) -> dict:
@@ -42,7 +43,7 @@ def _request(path: str, params: dict[str, str] | None = None) -> dict:
     if not key:
         print(
             "error: no Leya API key configured. "
-            "Ask the user for their key and run /leya:setup <key> to save it.",
+            "Ask the user for their key and run /leya-legal:setup <key> to save it.",
             file=sys.stderr,
         )
         sys.exit(2)

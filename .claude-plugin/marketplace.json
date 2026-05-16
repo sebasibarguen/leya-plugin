@@ -12,7 +12,7 @@
       "name": "leya-legal",
       "source": "./plugins/leya-legal",
       "description": "Search and cite Guatemalan legal documents — laws, decrees, and congressional initiatives — directly from the Leya corpus.",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "homepage": "https://leya.gt",
       "category": "legal",
       "keywords": ["legal", "guatemala", "law", "research", "spanish", "es"]
