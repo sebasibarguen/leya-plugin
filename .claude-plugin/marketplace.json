@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "leya",
+  "version": "0.1.0",
+  "description": "Leya plugins for Claude Code and Cowork — Guatemalan legal research over a fresh, indexed corpus.",
+  "owner": {
+    "name": "Leya",
+    "url": "https://leya.gt"
+  },
+  "plugins": [
+    {
+      "name": "leya-legal",
+      "source": "./plugins/leya-legal",
+      "description": "Search and cite Guatemalan legal documents — laws, decrees, and congressional initiatives — directly from the Leya corpus.",
+      "version": "0.1.0",
+      "homepage": "https://leya.gt",
+      "category": "legal",
+      "keywords": ["legal", "guatemala", "law", "research", "spanish", "es"]
+    }
+  ]
+}

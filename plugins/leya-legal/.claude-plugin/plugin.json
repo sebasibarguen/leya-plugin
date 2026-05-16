@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin",
+  "name": "leya-legal",
+  "version": "0.1.0",
+  "description": "Search and cite Guatemalan legal documents — laws, decrees, congressional initiatives — directly from the Leya corpus. Provides a research skill and the /leya:research and /leya:setup slash commands.",
+  "author": {
+    "name": "Leya",
+    "url": "https://leya.gt"
+  },
+  "homepage": "https://leya.gt",
+  "license": "MIT",
+  "keywords": ["legal", "guatemala", "research"]
+}
