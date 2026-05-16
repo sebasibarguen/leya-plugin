@@ -8,7 +8,7 @@ import json
 import os
 import sys
 from pathlib import Path
-from urllib.parse import urlencode
+from urllib.parse import quote, urlencode
 from urllib.request import Request, urlopen
 from urllib.error import HTTPError
 
@@ -84,7 +84,7 @@ def cmd_search(args: argparse.Namespace) -> int:
 def cmd_document(args: argparse.Namespace) -> int:
     print(
         json.dumps(
-            _request(f"/v1/documents/{args.document_id}"),
+            _request(f"/v1/documents/{quote(args.document_id, safe='')}"),
             indent=2,
             ensure_ascii=False,
         )
@@ -95,7 +95,7 @@ def cmd_document(args: argparse.Namespace) -> int:
 def cmd_citation(args: argparse.Namespace) -> int:
     print(
         json.dumps(
-            _request(f"/v1/documents/{args.document_id}/citation"),
+            _request(f"/v1/documents/{quote(args.document_id, safe='')}/citation"),
             indent=2,
             ensure_ascii=False,
         )
