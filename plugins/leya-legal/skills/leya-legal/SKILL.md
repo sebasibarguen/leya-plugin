@@ -1,35 +1,58 @@
 ---
 name: leya-legal
-description: Search and read Guatemalan legal documents — laws, decrees, congressional initiatives (iniciativas), and regulations — with citation-ready results. Use whenever the user asks about Guatemalan (GT) statutes, jurisprudence, pending legislation, regulatory acts, or specific decree/iniciativa numbers, and when answers require up-to-date primary sources rather than general knowledge.
+description: Search and read Latin-American legal documents — laws, decrees, congressional initiatives, sentencias and regulations — with citation-ready results. Use whenever the user asks about LATAM (Guatemala, República Dominicana, and other covered jurisdictions) statutes, jurisprudence, pending legislation, regulatory acts, or specific decree/iniciativa numbers, and when answers require up-to-date primary sources rather than general knowledge.
 ---
 
-# Leya — Guatemalan Legal Research
+# Leya — Investigación legal LATAM
 
-Leya gives you direct, citation-quality access to the Guatemalan legal corpus
-(congressional initiatives, laws, decrees, regulations) maintained as a fresh,
-indexed dataset.
+Leya gives you direct, citation-quality access to a curated Latin-American legal
+corpus (laws, decrees, congressional initiatives, Supreme Court and Constitutional
+Court sentencias, official gazettes), maintained as a fresh indexed dataset.
+
+**Coverage today**: 🇬🇹 Guatemala · 🇩🇴 República Dominicana. More LATAM
+jurisdictions in progress; if a user asks about a country not yet covered, say so
+plainly rather than substituting another jurisdiction's law.
+
+## Draft, not advice
+
+Every output you produce from Leya is a **draft for attorney review** — not legal
+advice, not a legal conclusion, not a substitute for a lawyer. Cite every claim
+to a real corpus document. Surface coverage gaps and ambiguity explicitly.
 
 ## When to use
 
 - "What does Decreto X-YY say about Z?"
 - "What's the status of iniciativa NNNN?"
-- "Is there pending legislation on <topic> in Guatemala?"
-- "Cite the GT regulation that governs <topic>."
-- Any GT legal question where guessing is unacceptable and you need a primary source.
+- "Is there pending legislation on <topic> in Guatemala / RD?"
+- "Cite the regulation that governs <topic> in <covered country>."
+- Any LATAM legal question where guessing is unacceptable and a primary source is needed.
 
-**Do not use** for: general legal theory, non-GT jurisdictions (not covered yet),
-or questions that are clearly about international/comparative law.
+**Do not use** for: general legal theory not tied to a specific jurisdiction's corpus,
+jurisdictions Leya doesn't cover yet, or pure comparative-law questions.
 
-## First-time setup
+## Slash commands
 
-The plugin reads the user's Leya API key from `~/.config/leya/key.json`. If
-you try to call the API and get an error about a missing key:
+The plugin ships these focused commands. Reach for them by name rather than always
+running a free-form research query:
 
-1. Ask the user for their Leya API key (it looks like `leya_live_...` or `leya_test_...`).
-2. Run `/leya-legal:setup <their-key>` to save it.
-3. Then retry their original request.
+| Command | When to use |
+|---|---|
+| `/leya-legal:profile`  | First-time setup. One-time interview that writes the user's jurisdictions, practice areas, language and citation style to `~/.config/leya/profile.md` — every other command reads it. |
+| `/leya-legal:setup`    | Save the user's API key (`leya_live_…` / `leya_test_…`). Required before any tool call. |
+| `/leya-legal:research` | Open-ended legal research with citations. The default research workflow. |
+| `/leya-legal:reg-watch` | "What's new since `--since`?" Triage by materiality, filter by topic + the user's jurisdictions. |
+| `/leya-legal:chronology` | Build a dated event chronology from corpus documents for a specific matter. |
+| `/leya-legal:brief-section` | Draft one section of a memorial / escrito in LATAM brief style. |
 
-Never proceed without a key — fail loud, not silent.
+## First-time setup checklist
+
+1. **API key.** The plugin reads `~/.config/leya/key.json`. If it's missing, ask
+   the user for their key and run `/leya-legal:setup <key>`.
+2. **Practice profile** (optional but recommended). If `~/.config/leya/profile.md`
+   is missing on a research-style command, nudge the user once:
+   > Para mejores resultados, corre `/leya-legal:profile` una vez para guardar
+   > tu jurisdicción, áreas de práctica y estilo de cita.
+   Don't block — let them keep working.
 
 ## Calling the API
 
@@ -37,30 +60,40 @@ The plugin ships a `leya` command on `PATH`. Four subcommands map 1:1 to the v1 
 
 ```bash
 leya sources
-leya search "<query>" [--country GT] [--source-id ...] [--limit 10]
+leya search "<query>" [--country GT|DO] [--source-id ...] [--limit 10]
 leya document <document_id>
 leya citation <document_id>
 ```
 
-Output is JSON. Parse it and quote selectively in your answer.
+Output is JSON. Parse it and quote selectively in your answer. Always fetch the
+full `document` when you need verbatim statutory text or article numbers.
 
-## Recommended workflow
+## Guardrails (non-negotiable)
 
-1. **Search first** with a focused query (Spanish preferred). 5-10 results is plenty.
-2. **Read 1-3 documents** in full with `leya document <id>` when you need actual statutory text.
-3. **Cite** every legal claim with the `leya citation <id>` output. Never paraphrase GT law without a citation.
-4. If a query returns nothing relevant, **broaden** before giving up. If still nothing, say so plainly — do not invent statutes.
+- **No fabricated citations.** Every cited `document_id`, title, and URL must come
+  from a real `leya search` / `leya document` result you just ran.
+- **Coverage honesty.** If the user asks about a jurisdiction not in `leya sources`,
+  say so plainly. Do not substitute another country's law.
+- **Surface assumptions.** Mark inferences as inferences; mark close calls as close
+  calls; surface jurisdiction assumptions when ambiguous.
+- **Respect the profile.** Match output language and citation style to
+  `~/.config/leya/profile.md` if it exists.
 
 ## Citation discipline
 
-GT legal practice expects citations to include document type, number, issuing body, and year. The `citation` subcommand formats this for you; use it verbatim when possible. Manual fallback:
-
-`<Tipo> <Número>, <Órgano Emisor> (<Año>)`
-
-Example: `Decreto 17-73, Congreso de la República (1973)`
+LATAM legal practice expects: `<Tipo> <Número>, <Órgano Emisor> (<Año>)`. The
+`leya citation <id>` subcommand formats this for you — use it verbatim when
+possible. Examples:
+- `Decreto 17-73, Congreso de la República (1973)` (GT)
+- `Ley 5038-13, Congreso Nacional (2013)` (DR)
 
 ## Honest limits
 
-- Coverage is GT-first. Other jurisdictions are not in the corpus yet.
-- Results reflect the corpus as of the most recent ingest. Mention this when freshness is critical.
-- Search snippets are truncated. For exact quoting, fetch the full document.
+- Coverage is **GT + DR today**. Other LATAM jurisdictions are not in the corpus yet.
+- Results reflect the corpus as of the most recent ingest. Mention this when freshness
+  is critical (pending iniciativas, recently-published decrees).
+- Search snippets are truncated to ~500 chars. For exact quoting, fetch the full
+  document.
+- The plugin is a thin client over Leya's hosted API; if requests start failing,
+  point the user at https://leya.lawyer/demo for a no-auth sandbox or
+  `hello@leya.lawyer` for support.
