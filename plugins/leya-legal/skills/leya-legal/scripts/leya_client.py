@@ -67,6 +67,19 @@ def cmd_sources(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_status(args: argparse.Namespace) -> int:
+    """Fetch corpus health from the public status endpoint — no API key required."""
+    base = os.environ.get("LEYA_API_BASE", DEFAULT_BASE).rstrip("/")
+    try:
+        from urllib.request import urlopen as _urlopen
+        with _urlopen(f"{base}/api/corpus/status", timeout=15) as resp:
+            print(json.dumps(json.loads(resp.read().decode("utf-8")), indent=2, ensure_ascii=False))
+    except Exception as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
+    return 0
+
+
 def cmd_search(args: argparse.Namespace) -> int:
     params = {
         "q": args.query,
@@ -110,9 +123,12 @@ def build_parser() -> argparse.ArgumentParser:
     s_sources = sub.add_parser("sources", help="List registered legal sources.")
     s_sources.set_defaults(func=cmd_sources)
 
+    s_status = sub.add_parser("status", help="Show corpus coverage: countries, sources, and doc counts (no API key required).")
+    s_status.set_defaults(func=cmd_status)
+
     s_search = sub.add_parser("search", help="Search the legal corpus.")
     s_search.add_argument("query")
-    s_search.add_argument("--country", default="GT")
+    s_search.add_argument("--country", default=None, help="ISO country code (e.g. GT, DO). Omit to search all countries.")
     s_search.add_argument("--source-id", dest="source_id")
     s_search.add_argument("--document-type", dest="document_type")
     s_search.add_argument("--as-of", dest="as_of")

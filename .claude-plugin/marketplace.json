@@ -1,21 +1,21 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
   "name": "leya",
-  "version": "0.1.0",
-  "description": "Leya plugins for Claude Code and Cowork — Guatemalan legal research over a fresh, indexed corpus.",
+  "version": "0.1.1",
+  "description": "Leya plugins for Claude Code — Latin American legal research over a fresh, indexed corpus. Covers Guatemala and República Dominicana today; more LATAM jurisdictions in progress.",
   "owner": {
     "name": "Leya",
-    "url": "https://leya.gt"
+    "url": "https://leya.lawyer"
   },
   "plugins": [
     {
       "name": "leya-legal",
       "source": "./plugins/leya-legal",
-      "description": "Search and cite Guatemalan legal documents — laws, decrees, and congressional initiatives — directly from the Leya corpus.",
-      "version": "0.1.3",
-      "homepage": "https://leya.gt",
+      "description": "Search and cite Latin American legal documents — laws, decrees, court rulings, and congressional initiatives — directly from the Leya corpus. Guatemala and República Dominicana available now.",
+      "version": "0.1.4",
+      "homepage": "https://leya.lawyer",
       "category": "legal",
-      "keywords": ["legal", "guatemala", "law", "research", "spanish", "es"]
+      "keywords": ["legal", "latam", "latin-america", "guatemala", "dominican-republic", "law", "research", "spanish", "es"]
     }
   ]
 }

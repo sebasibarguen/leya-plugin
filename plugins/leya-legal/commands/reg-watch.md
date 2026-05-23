@@ -76,11 +76,11 @@ If a bucket is empty, omit the section entirely (don't write "ninguno").
 
 ## Coverage honesty
 
-If the user's profile mentions jurisdictions Leya doesn't cover yet (anything other than
-GT and DO as of today), say so at the top:
+Before running searches, check which jurisdictions are live by running `leya status`.
+If the user's profile mentions a jurisdiction not in that list, say so at the top:
 
 > **Cobertura limitada:** Solicitaste seguimiento de [país], pero el corpus de Leya
-> aún no lo cubre. Avísanos cuando esté listo.
+> aún no lo cubre. Corre `/leya-legal:sources` para ver los países disponibles hoy.
 
 ## Tying into recurring jobs (optional)
 

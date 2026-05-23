@@ -1,13 +1,13 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin",
   "name": "leya-legal",
-  "version": "0.1.3",
-  "description": "Search and cite Guatemalan legal documents — laws, decrees, congressional initiatives — directly from the Leya corpus. Provides a research skill and the /leya:research and /leya:setup slash commands.",
+  "version": "0.1.4",
+  "description": "Search and cite Latin American legal documents — laws, decrees, congressional initiatives, court rulings, official gazettes — directly from the Leya corpus. Covers Guatemala and República Dominicana today; more LATAM jurisdictions in progress.",
   "author": {
     "name": "Leya",
-    "url": "https://leya.gt"
+    "url": "https://leya.lawyer"
   },
-  "homepage": "https://leya.gt",
+  "homepage": "https://leya.lawyer",
   "license": "MIT",
-  "keywords": ["legal", "guatemala", "research"]
+  "keywords": ["legal", "latam", "latin-america", "guatemala", "dominican-republic", "research", "spanish"]
 }

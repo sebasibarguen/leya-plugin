@@ -37,8 +37,9 @@ running a free-form research query:
 
 | Command | When to use |
 |---|---|
-| `/leya-legal:profile`  | First-time setup. One-time interview that writes the user's jurisdictions, practice areas, language and citation style to `~/.config/leya/profile.md` — every other command reads it. |
+| `/leya-legal:sources`  | **Check coverage first.** Shows which countries and datasets are live, with document counts. Run this when the user asks what Leya covers or before starting research on an unfamiliar jurisdiction. |
 | `/leya-legal:setup`    | Save the user's API key (`leya_live_…` / `leya_test_…`). Required before any tool call. |
+| `/leya-legal:profile`  | One-time interview that writes the user's jurisdictions, practice areas, language and citation style to `~/.config/leya/profile.md` — every other command reads it. |
 | `/leya-legal:research` | Open-ended legal research with citations. The default research workflow. |
 | `/leya-legal:reg-watch` | "What's new since `--since`?" Triage by materiality, filter by topic + the user's jurisdictions. |
 | `/leya-legal:chronology` | Build a dated event chronology from corpus documents for a specific matter. |
@@ -56,14 +57,17 @@ running a free-form research query:
 
 ## Calling the API
 
-The plugin ships a `leya` command on `PATH`. Four subcommands map 1:1 to the v1 API:
+The plugin ships a `leya` command on `PATH`. Subcommands:
 
 ```bash
-leya sources
+leya status                          # live coverage: countries, sources, doc counts (no key needed)
+leya sources                         # registered sources as JSON
 leya search "<query>" [--country GT|DO] [--source-id ...] [--limit 10]
 leya document <document_id>
 leya citation <document_id>
 ```
+
+`--country` is optional — omitting it searches across all covered jurisdictions.
 
 Output is JSON. Parse it and quote selectively in your answer. Always fetch the
 full `document` when you need verbatim statutory text or article numbers.

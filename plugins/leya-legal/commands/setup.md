@@ -27,6 +27,6 @@ Validate and persist it:
 
    If that returns a JSON list of legal sources, the key works. If it returns a 401, the key is invalid or revoked — tell the user.
 
-4. Confirm with a short message: "Your Leya key is saved. You can now use /leya-legal:research or just ask me about Guatemalan law." Do not echo the key back.
+4. Confirm with a short message: "Your Leya key is saved. You can now use `/leya-legal:sources` to see which countries are covered, or `/leya-legal:research` to start researching." Do not echo the key back.
 
 Do not save the key anywhere else. Do not print the key in your response.
